@@ -1,1 +1,1 @@
-#decodes code from signal
+#decodes code from signal and converts to binary
