@@ -1,6 +1,3 @@
-# This is a tester 
+# This will be the payload parsing function that extracts the Sensor ID and data
 
 
-# bit extraction: demodulate frequency gathered by hackRf
-# ASK -> ampltitude shift keying
-# to FSK -> frequency shift keying
