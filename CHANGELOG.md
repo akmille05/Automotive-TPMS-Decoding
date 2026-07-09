@@ -11,3 +11,10 @@
 
 ### Added
 - created threshold for signal burst in signal.py
+
+### Changed 
+- dsp_demoduation.py has full implementation (general draft)
+- signal_processing.py created
+- signal_processing.py implemented (general draft)
+
+
