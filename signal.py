@@ -11,6 +11,9 @@ SAMPLE_RATE = 2_000_000
 LNA_GAIN = 32
 VGA_GAIN = 20
 
+noise_floor = None
+triggered = False
+
 def rx_callback(device, buffer, buffer_length, valid_length):
     raw_bytes = bytes(buffer[:valid_length])
 
@@ -23,7 +26,22 @@ def rx_callback(device, buffer, buffer_length, valid_length):
 
     amplitude = np.mean(np.abs(iq)) #collects strength of each signal and averages them to get the overall amplitude of the signal
 
-    print("Amplitude:", amplitude)
+    global noise_floor
+    global triggered
+
+    if noise_floor is None:
+        noise_floor = amplitude
+
+    noise_floor = 0.99 * noise_floor + 0.01 * amplitude
+    threshold = noise_floor * 3
+
+    print("Amplitude:", amplitude, "Noise Floor:", noise_floor)
+
+    if amplitude > threshold and not triggered: #checks for large jump in amplitude (signal strength)
+        print("\n" + "=" * 50)
+        print("🚨 SIGNAL DETECTED! 🚨")
+        print("=" * 50 + "\n")
+        triggered = True
 
     return 0 #tells the hackrf to keep recieving
 
