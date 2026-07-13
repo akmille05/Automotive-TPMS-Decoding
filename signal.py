@@ -20,9 +20,6 @@ SAVE_SECONDS = 1.0
 captured_buffers = []
 capture_start_time = None
 
-callback_count = 0 #TESTING PURPOSES
-TEST_MODE = True #TESTING PURPOSES
-
 
 def rx_callback(device, buffer, buffer_length, valid_length):
     raw_bytes = bytes(buffer[:valid_length])
@@ -41,9 +38,6 @@ def rx_callback(device, buffer, buffer_length, valid_length):
 
     global triggered, captured_buffers, capture_start_time
 
-    global callback_count #TESTING PURPOSES
-    callback_count += 1 #TESTING PURPOSES
-
     if noise_floor is None:
         noise_floor = amplitude
 
@@ -52,9 +46,7 @@ def rx_callback(device, buffer, buffer_length, valid_length):
 
     print("Amplitude:", amplitude, "Noise Floor:", noise_floor)
 
-    test_trigger = TEST_MODE and callback_count >= 20 #TESTING PURPOSES
-
-    if (amplitude > threshold or test_trigger) and not triggered: #checks for large jump in amplitude (signal strength)
+    if amplitude > threshold and not triggered: #checks for large jump in amplitude (signal strength)
         triggered = True
         capture_start_time = time.time()
         captured_buffers = [raw_bytes]
