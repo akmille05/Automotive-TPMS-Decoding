@@ -4,6 +4,7 @@
 from python_hackrf import pyhackrf
 import numpy as np
 import time
+from save_iq import save_raw_iq
 
 CENTER_FREQ = 315_000_000
 SAMPLE_RATE = 2_000_000
@@ -13,6 +14,12 @@ VGA_GAIN = 20
 
 noise_floor = None
 triggered = False
+
+SAVE_SECONDS = 1.0
+
+captured_buffers = []
+capture_start_time = None
+
 
 def rx_callback(device, buffer, buffer_length, valid_length):
     raw_bytes = bytes(buffer[:valid_length])
@@ -29,6 +36,8 @@ def rx_callback(device, buffer, buffer_length, valid_length):
     global noise_floor
     global triggered
 
+    global triggered, captured_buffers, capture_start_time
+
     if noise_floor is None:
         noise_floor = amplitude
 
@@ -38,10 +47,19 @@ def rx_callback(device, buffer, buffer_length, valid_length):
     print("Amplitude:", amplitude, "Noise Floor:", noise_floor)
 
     if amplitude > threshold and not triggered: #checks for large jump in amplitude (signal strength)
+        triggered = True
+        capture_start_time = time.time()
+        captured_buffers = [raw_bytes]
         print("\n" + "=" * 50)
         print("🚨 SIGNAL DETECTED! 🚨")
         print("=" * 50 + "\n")
-        triggered = True
+    
+    elif triggered:
+        captured_buffers.append(raw_bytes)
+
+        if time.time() - capture_start_time >= SAVE_SECONDS:
+            save_raw_iq(captured_buffers)
+            return -1
 
     return 0 #tells the hackrf to keep recieving
 
