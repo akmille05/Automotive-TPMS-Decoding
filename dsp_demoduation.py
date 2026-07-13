@@ -1,6 +1,7 @@
 # This will be dsp demodulation file that extracts the baseband bits
 import numpy as np
 
+
 class Demodulate:
     def fsk_demod(self, iq):
         """
