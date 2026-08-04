@@ -26,6 +26,14 @@ def rx_callback(device, buffer, buffer_length, valid_length):
 
     samples = np.frombuffer(raw_bytes, dtype=np.int8)
 
+    if len(samples) < 2:
+        return 0
+
+    if len(samples) % 2 != 0:
+        samples = samples[:-1]
+        raw_bytes = raw_bytes[:-1]
+
+
     i_samples = samples[0::2] #collects I values
     q_samples = samples[1::2] #collects Q values
 
@@ -41,7 +49,8 @@ def rx_callback(device, buffer, buffer_length, valid_length):
     if noise_floor is None:
         noise_floor = amplitude
 
-    noise_floor = 0.99 * noise_floor + 0.01 * amplitude
+    if not triggered:
+        noise_floor = 0.99 * noise_floor + 0.01 * amplitude
     threshold = noise_floor * 3
 
     print("Amplitude:", amplitude, "Noise Floor:", noise_floor)
