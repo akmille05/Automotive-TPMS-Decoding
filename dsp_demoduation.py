@@ -1,5 +1,6 @@
 # This will be dsp demodulation file that extracts the baseband bits
 import numpy as np
+from config import *
 
 
 class Demodulate:

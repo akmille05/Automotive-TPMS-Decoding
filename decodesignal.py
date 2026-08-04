@@ -1,6 +1,7 @@
-#decodes code from signal and converts to binary
+# decodes code from signal and converts to binary
 import numpy as np
 from python_hackrf import pyhackrf
+from config import *
 
 class Decoder:
 

@@ -1,4 +1,5 @@
 import numpy as np
+from config import *
 
 class Simulation:
     def generate_tpms_payload(sensor_id, pressure_psi, temp_c):

@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from signal import # give signal class
 from dsp_demoduation import Demodulate
+from config import *
 
 class SignalProc:
 

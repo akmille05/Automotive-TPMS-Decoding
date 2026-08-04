@@ -4,12 +4,8 @@
 from python_hackrf import pyhackrf
 import numpy as np
 import time
+from config import *
 
-CENTER_FREQ = 315_000_000
-SAMPLE_RATE = 2_000_000
-
-LNA_GAIN = 32
-VGA_GAIN = 20
 
 noise_floor = None
 triggered = False
